@@ -1,4 +1,5 @@
 ﻿using DevLife_Portal.Common.Extensions;
+using DevLife_Portal.Common.Services;
 using System.Text.Json;
 
 namespace DevLife_Portal.Features.EscapeMeeting
@@ -13,13 +14,12 @@ namespace DevLife_Portal.Features.EscapeMeeting
             }
         }
 
-        public static async Task<IResult> Handler(HttpContext context, RedisService redis)
+        public static async Task<IResult> Handler(HttpContext context, RedisService redis, CancellationToken cancellationToken)
         {
             var userId = context.Session.GetString("userId");
             if (string.IsNullOrWhiteSpace(userId)) return Results.Unauthorized();
 
-            var key = $"favorites:{userId}";
-            var raw = await redis.Db.ListRangeAsync(key);
+            var raw = await redis.GetFavoritesAsync(int.Parse(userId), cancellationToken);
             var favorites = raw.Select(r => JsonSerializer.Deserialize<SaveFavoriteExcuse.Request>(r!)).ToList();
 
             return Results.Ok(favorites);

@@ -1,7 +1,7 @@
 ﻿using DevLife_Portal.Common.Extensions;
+using DevLife_Portal.Common.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 
 namespace DevLife_Portal.Features.EscapeMeeting
 {
@@ -27,21 +27,29 @@ namespace DevLife_Portal.Features.EscapeMeeting
         }
 
         public static async Task<IResult> Handler(
-            [FromBody] Request request,
-            IValidator<Request> validator,
-            HttpContext context,
-            RedisService redis,
-            CancellationToken ct)
+         [FromBody] Request request,
+         IValidator<Request> validator,
+         HttpContext context,
+         RedisService redis,
+         CancellationToken ct)
         {
             var validation = await validator.ValidateAsync(request, ct);
-            if (!validation.IsValid) return Results.BadRequest(validation.Errors);
+            if (!validation.IsValid)
+            {
+                return Results.BadRequest(validation.Errors);
+            }
 
             var userId = context.Session.GetString("userId");
-            if (string.IsNullOrWhiteSpace(userId)) return Results.Unauthorized();
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Results.Unauthorized();
+            }
 
             var key = $"favorites:{userId}";
-            await redis.Db.ListRightPushAsync(key, JsonSerializer.Serialize(request), flags: CommandFlags.FireAndForget);
+            redis.AddToQueue(key, request); 
+
             return Results.Ok(new { Message = "Saved to favorites." });
         }
+
     }
 }

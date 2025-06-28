@@ -42,31 +42,4 @@ namespace DevLife_Portal.Features.BugChase
     }
 }
 
-//    public class GetLeaderboard
-//    {
-//        public record LeaderboardEntry(string Username, int Score);
 
-//        public class Endpoint : IEndpoint
-//        {
-//            public void MapEndpoint(IEndpointRouteBuilder app)
-//            {
-//                app.MapGet("/api/bugchase/leaderboard", Handler)
-//                   .WithTags("BugChase");
-//            }
-//        }
-
-//        public static async Task<IResult> Handler(AppDbContext context, CancellationToken ct)
-//        {
-//            var topScores = await context.BugChaseScores
-//                .OrderByDescending(s => s.Score)
-//                .Take(10)
-//                .Join(context.Users,
-//                    score => score.UserId,
-//                    user => user.Id,
-//                    (score, user) => new LeaderboardEntry(user.Username, score.Score))
-//                .ToListAsync(ct);
-
-//            return Results.Ok(topScores);
-//        }
-//    }
-//}

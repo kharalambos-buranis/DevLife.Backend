@@ -1,4 +1,5 @@
-﻿using DevLife_Portal.Common.Extensions;
+﻿using DevLife_Portal.Common.Enums;
+using DevLife_Portal.Common.Extensions;
 using DevLife_Portal.Common.Models;
 using DevLife_Portal.Infrastructure.Database.PostgreSQL;
 using FluentValidation;
@@ -11,7 +12,7 @@ namespace DevLife_Portal.Features.Auth
     {
         public record Request(string Username);
 
-        public record Response(string Username, string FullName, string Technostack, string Experience, ZodiacSign Sign, int Points, int Streak);
+        public record Response(string Username, string FullName, string Technostack, Experience Experience, ZodiacSign Sign, int Points, int Streak);
 
         public sealed class Validator : AbstractValidator<Request>
         {
@@ -59,7 +60,6 @@ namespace DevLife_Portal.Features.Auth
 
             return Results.Ok(new
             {
-                // Token = accessToken,
                 User = new
                 {
                     user.Id,

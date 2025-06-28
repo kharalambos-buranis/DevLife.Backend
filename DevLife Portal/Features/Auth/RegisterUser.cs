@@ -1,4 +1,5 @@
-﻿using DevLife_Portal.Common.Extensions;
+﻿using DevLife_Portal.Common.Enums;
+using DevLife_Portal.Common.Extensions;
 using DevLife_Portal.Common.Models;
 using DevLife_Portal.Common.Services;
 using DevLife_Portal.Infrastructure.Database.PostgreSQL;
@@ -10,7 +11,7 @@ namespace DevLife_Portal.Features.Auth
 {
     public class RegisterUser
     {
-        public record Request(string Username, string Name, string LastName, DateTime DateOfBirth, string TechnoStack, string Experience);
+        public record Request(string Username, string Name, string LastName, DateTime DateOfBirth, string TechnoStack, Experience Experience);
         public record Response(int Id, string UserName, string Name, string Lastname, ZodiacSign Sign);
 
         public sealed class Validator : AbstractValidator<Request>

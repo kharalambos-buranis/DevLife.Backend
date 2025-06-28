@@ -3,6 +3,7 @@ using System;
 using DevLife_Portal.Infrastructure.Database.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DevLife_Portal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250628134857_AddNewExperienceColumn")]
+    partial class AddNewExperienceColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,9 +102,6 @@ namespace DevLife_Portal.Migrations
                     b.Property<int>("Experience")
                         .HasColumnType("integer")
                         .HasColumnName("experience");
-
-                    b.Property<DateTime?>("LastDailyChallengeDate")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Lastname")
                         .IsRequired()

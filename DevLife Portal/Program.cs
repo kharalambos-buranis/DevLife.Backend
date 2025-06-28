@@ -6,12 +6,11 @@ using DevLife_Portal.Infrastructure.Mongo;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
+using StackExchange.Redis;
 using System.Net.Http.Headers;
 using static DevLife_Portal.Features.Auth.RegisterUser;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres")));
@@ -38,6 +37,13 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient<ICodeWarsChallengeService, CodeWarsChallengeService>();
 builder.Services.AddScoped<ICodeExecutionService, MockCodeExecutionService>();
 builder.Services.AddScoped<IAiContentService, MockAiContentService>();
+var redisConnectionString = builder.Configuration.GetSection("Redis")["ConnectionString"] ?? "localhost:6379";
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+    ConnectionMultiplexer.Connect(redisConnectionString));
+
+builder.Services.AddSingleton<RedisService>();
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -46,9 +52,6 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-
 
 using (var scope = app.Services.CreateScope())
 {

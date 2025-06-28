@@ -38,15 +38,22 @@ namespace DevLife_Portal.Features.BugChase
         {
             var validation = await validator.ValidateAsync(request, cancelationToken);
             if (!validation.IsValid)
+            {
                 return Results.BadRequest(validation.Errors);
+
+            }
 
             var userIdStr = httpContext.Session.GetString("userId");
             if (!int.TryParse(userIdStr, out var userId))
+            {
                 return Results.Unauthorized();
+            }
 
             var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId, cancelationToken);
             if (user == null)
+            {
                 return Results.NotFound("User not found");
+            }
 
             var score = new BugChaseScore
             {

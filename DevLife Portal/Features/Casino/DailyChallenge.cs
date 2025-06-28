@@ -4,6 +4,7 @@ using DevLife_Portal.Infrastructure.Database.PostgreSQL;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace DevLife_Portal.Features.Casino
@@ -50,16 +51,22 @@ namespace DevLife_Portal.Features.Casino
             {
                 var userIdString = httpContextAccessor.HttpContext?.Session.GetString("userId");
                 if (string.IsNullOrWhiteSpace(userIdString))
+                {
                     throw new Exception("Not logged in");
+                }
 
                 var userId = int.Parse(userIdString);
                 var user = await context.Users.FindAsync(userId);
 
                 if (user == null)
+                {
                     throw new Exception("User not found");
+                }
 
-                //if (user.LastDailyChallengeDate?.Date == DateTime.UtcNow.Date)
-                //    return new Response("", "", "", "✅ You already completed today’s challenge.");
+                if (user.LastDailyChallengeDate?.Date == DateTime.UtcNow.Date)
+                {
+                    return new Response("", "", "", "✅ You already completed today’s challenge.");
+                }
 
                 Console.WriteLine($"Language = {user.TechnoStack}, Experience = {user.Experience}");
 
@@ -68,14 +75,16 @@ namespace DevLife_Portal.Features.Casino
                     s.Experience == user.Experience).FirstOrDefaultAsync(cancellationToken);
 
                 if (snippet is null)
+                {
                     throw new Exception("Snippet not found");
+                }
 
                 bool correctIsA = new Random().Next(2) == 0;
                 string a = correctIsA ? snippet.CorrectCode : snippet.BuggyCode;
                 string b = correctIsA ? snippet.BuggyCode : snippet.CorrectCode;
 
                 cache.Set($"casino:daily:{userId}:correct", correctIsA ? "a" : "b", TimeSpan.FromHours(24));
-              //  user.LastDailyChallengeDate = DateTime.UtcNow;
+                user.LastDailyChallengeDate = DateTime.UtcNow;
 
                 await context.SaveChangesAsync(cancellationToken);
 

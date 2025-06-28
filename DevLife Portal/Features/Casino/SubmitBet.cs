@@ -70,12 +70,10 @@ namespace DevLife_Portal.Features.Casino
                     return new Response(false, user.TotalPoints, user.Streak, "No active snippet found. Please load one first.");
                 }
 
-                Console.WriteLine($"User.TechnoStack = {user.TechnoStack}");
-                Console.WriteLine($"User.Experience = {user.Experience}");
 
                 var snippet = await _snippets.Find(s =>
                    s.Language.ToLower() == user.TechnoStack.ToLower() &&
-                   s.Experience.ToLower() == user.Experience.ToLower()).FirstOrDefaultAsync();
+                   s.Experience == user.Experience).FirstOrDefaultAsync();
 
                 if (snippet is null)
                 {

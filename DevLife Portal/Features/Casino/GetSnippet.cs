@@ -9,7 +9,7 @@ using MongoDB.Driver;
 
 namespace DevLife_Portal.Features.Casino
 {
-    public static class GetSnippetsFromCodewars
+    public static class GetSnippet
     {
         public record Request() : IRequest<Response>;
 
@@ -51,7 +51,6 @@ namespace DevLife_Portal.Features.Casino
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                //var userId = int.Parse(_httpContext.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
                 var userIdString = _httpContext.HttpContext?.Session.GetString("userId");
 
                 if (string.IsNullOrWhiteSpace(userIdString))
@@ -63,7 +62,8 @@ namespace DevLife_Portal.Features.Casino
                 var user = await _db.Users.FindAsync(userId);
 
                 var filter = Builders<CodeSnippet>.Filter.Regex("Language", new BsonRegularExpression(user.TechnoStack, "i")) &
-                Builders<CodeSnippet>.Filter.Regex("Experience", new BsonRegularExpression(user.Experience, "i"));
+             Builders<CodeSnippet>.Filter.Eq(snippet => snippet.Experience, user.Experience);
+
 
                 Console.WriteLine($"User Stack: {user.TechnoStack}, Level: {user.Experience}");
 

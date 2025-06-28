@@ -1,4 +1,6 @@
-﻿namespace DevLife_Portal.Common.Models
+﻿using DevLife_Portal.Common.Enums;
+
+namespace DevLife_Portal.Common.Models
 {
     public class User
     {
@@ -8,7 +10,7 @@
         public string Lastname { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string TechnoStack { get; set; }
-        public string Experience { get; set; }
+        public Experience Experience { get; set; }
         public int ZodiacSignId { get; set; }
         public ZodiacSign ZodiacSign { get; set; } 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -16,6 +18,7 @@
         public int Streak { get; set; }
         public string? AvatarUrl { get; set; }
         public string FullName => $"{Name} {Lastname}";
+        public DateTime? LastDailyChallengeDate { get; set; }
 
 
     }

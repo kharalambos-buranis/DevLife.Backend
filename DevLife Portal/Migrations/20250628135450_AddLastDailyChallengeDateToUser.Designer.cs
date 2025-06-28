@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DevLife_Portal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250626143855_SecondMigration")]
-    partial class SecondMigration
+    [Migration("20250628135450_AddLastDailyChallengeDateToUser")]
+    partial class AddLastDailyChallengeDateToUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,10 +99,12 @@ namespace DevLife_Portal.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("date_of_birth");
 
-                    b.Property<string>("Experience")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Experience")
+                        .HasColumnType("integer")
                         .HasColumnName("experience");
+
+                    b.Property<DateTime?>("LastDailyChallengeDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Lastname")
                         .IsRequired()

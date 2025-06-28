@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using DevLife_Portal.Common.Enums;
+using System.Linq.Expressions;
+using System.Text.Json;
 
 namespace DevLife_Portal.Common.Services
 {
@@ -6,11 +8,11 @@ namespace DevLife_Portal.Common.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _config;
-        private static readonly Dictionary<string, string[]> DifficultyMap = new()
+        private static readonly Dictionary<Experience, string[]> DifficultyMap = new()
         {
-            ["junior"] = ["8", "7"],
-            ["middle"] = ["6", "5"],
-            ["senior"] = ["4", "3"]
+            [Experience.Junior] = ["8", "7"],
+            [Experience.Middle] = ["6", "5"],
+            [Experience.Senior] = ["4", "3"]
         };
         private static readonly Dictionary<string, List<string>> KataIdsByDifficulty = new()
         {
@@ -109,16 +111,22 @@ namespace DevLife_Portal.Common.Services
             _config = config;
         }
 
-        public async Task<CodewarsChallengeDto?> GetRandomChallengeAsync(string language, string difficulty, CancellationToken ct)
+        public async Task<CodewarsChallengeDto?> GetRandomChallengeAsync(string language, Experience difficulty, CancellationToken ct)
         {
             if (!DifficultyMap.TryGetValue(difficulty, out var codewarsDifficulties))
+            {
                 throw new ArgumentException("Invalid difficulty level");
+
+            }
 
             var random = new Random();
             var selectedLevel = codewarsDifficulties[random.Next(codewarsDifficulties.Length)];
 
             if (!KataIdsByDifficulty.TryGetValue(selectedLevel, out var kataIds))
+            {
                 return null;
+
+            }
 
             var challengeId = kataIds[random.Next(kataIds.Count)];
 
@@ -129,7 +137,10 @@ namespace DevLife_Portal.Common.Services
             var response = await _httpClient.GetAsync($"https://www.codewars.com/api/v1/code-challenges/{challengeId}", ct);
 
             if (!response.IsSuccessStatusCode)
+            {
                 return null;
+
+            }
 
             var json = await response.Content.ReadAsStringAsync(ct);
             var data = JsonSerializer.Deserialize<CodewarsChallengeDto>(json, new JsonSerializerOptions
@@ -139,28 +150,5 @@ namespace DevLife_Portal.Common.Services
 
             return data;
         }
-
-        //public async Task<CodewarsChallengeDto?> GetRandomChallengeAsync(string language, string difficulty, CancellationToken ct)
-        //{
-        //    var apiKey = _config["Codewars:ApiKey"];
-        //    _httpClient.DefaultRequestHeaders.Clear();
-        //    _httpClient.DefaultRequestHeaders.Add("Authorization", apiKey);
-
-        //    // Replace this logic with random search or specific kata ids
-        //    var challengeId = "526571aae218b8ee490006f4"; // e.g., "Stop gninnipS My sdroW"
-
-        //    var response = await _httpClient.GetAsync($"https://www.codewars.com/api/v1/code-challenges/{challengeId}", ct);
-
-        //    if (!response.IsSuccessStatusCode)
-        //        return null;
-
-        //    var json = await response.Content.ReadAsStringAsync(ct);
-        //    var data = JsonSerializer.Deserialize<CodewarsChallengeDto>(json, new JsonSerializerOptions
-        //    {
-        //        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        //    });
-
-        //    return data;
-        //}
     }
 }
