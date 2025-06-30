@@ -29,7 +29,7 @@ namespace DevLife_Portal.Features.BugChase
                         .Where(s => s.UserId == user.Id)
                         .OrderByDescending(s => s.Score)
                         .Select(s => s.Score)
-                        .FirstOrDefault(); // returns 0 if none
+                        .FirstOrDefault(); 
 
                     return new LeaderboardEntry(user.Username, topScore);
                 })

@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Common\Services\DTO\**" />
+    <Content Remove="Common\Services\DTO\**" />
+    <EmbeddedResource Remove="Common\Services\DTO\**" />
+    <None Remove="Common\Services\DTO\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.0.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
     <PackageReference Include="MediatR" Version="12.5.0" />
@@ -26,10 +33,6 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.41" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Common\Services\DTO\" />
   </ItemGroup>
 
 </Project>

@@ -14,15 +14,15 @@ namespace DevLife_Portal.Common.Services
             _db = redis.GetDatabase();
         }
 
-        public async Task AddFavoriteAsync(int userId, string excuse, CancellationToken ct = default)
-        {
-            string key = $"favorites:{userId}";
-            await _db.SetAddAsync(key, excuse);
-        }
+        //public async Task AddFavoriteAsync(int userId, string excuse, CancellationToken ct = default)
+        //{
+        //    string key = $"favorites:set:{userId}";
+        //    await _db.SetAddAsync(key, excuse);
+        //}
 
         public async Task<List<string>> GetFavoritesAsync(int userId, CancellationToken ct = default)
         {
-            string key = $"favorites:{userId}";
+            string key = $"favorites:list:{userId}";
             var values = await _db.SetMembersAsync(key);
             return values.Select(x => x.ToString()).ToList();
         }

@@ -71,7 +71,6 @@ namespace DevLife_Portal.Features.Auth
 
                 if (existingUser is not null)
                 {
-                    //logger.LogWarning("Attempt to register with already used UserName {UserName}", request.Username);
                     return Results.BadRequest("UserName is already registered.");
                 }
 

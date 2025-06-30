@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DevLife_Portal.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250628135450_AddLastDailyChallengeDateToUser")]
-    partial class AddLastDailyChallengeDateToUser
+    [Migration("20250630075720_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

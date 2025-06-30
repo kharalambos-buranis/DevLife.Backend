@@ -18,7 +18,7 @@ namespace DevLife_Portal.Infrastructure.Mongo
             var existingCount = await _collection.CountDocumentsAsync(FilterDefinition<CodeSnippet>.Empty);
 
             if (existingCount > 0)
-                return; // Already seeded
+                return; 
 
             var snippets = new List<CodeSnippet>
         {

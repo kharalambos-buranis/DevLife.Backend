@@ -17,7 +17,10 @@ namespace DevLife_Portal.Features.EscapeMeeting
         public static async Task<IResult> Handler(HttpContext context, RedisService redis, CancellationToken cancellationToken)
         {
             var userId = context.Session.GetString("userId");
-            if (string.IsNullOrWhiteSpace(userId)) return Results.Unauthorized();
+            {
+                if (string.IsNullOrWhiteSpace(userId)) return Results.Unauthorized();
+
+            }
 
             var raw = await redis.GetFavoritesAsync(int.Parse(userId), cancellationToken);
             var favorites = raw.Select(r => JsonSerializer.Deserialize<SaveFavoriteExcuse.Request>(r!)).ToList();

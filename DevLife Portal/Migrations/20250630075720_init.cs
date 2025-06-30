@@ -59,12 +59,13 @@ namespace DevLife_Portal.Migrations
                     lastname = table.Column<string>(type: "text", nullable: false),
                     date_of_birth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     techno_stack = table.Column<string>(type: "text", nullable: false),
-                    experience = table.Column<string>(type: "text", nullable: false),
+                    experience = table.Column<int>(type: "integer", nullable: false),
                     zodiac_sign_id = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     total_points = table.Column<int>(type: "integer", nullable: false),
                     streak = table.Column<int>(type: "integer", nullable: false),
-                    avatar_url = table.Column<string>(type: "text", nullable: true)
+                    avatar_url = table.Column<string>(type: "text", nullable: true),
+                    LastDailyChallengeDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {

@@ -41,7 +41,6 @@ namespace DevLife_Portal.Features.Auth
             var validationResult = await validator.ValidateAsync(request, cancellationToken);
             if (!validationResult.IsValid)
             {
-                //logger.LogWarning("Invalid login input for {Email}", request.Email);
                 return Results.BadRequest(validationResult.Errors);
             }
 
@@ -51,11 +50,9 @@ namespace DevLife_Portal.Features.Auth
 
             if (user is null)
             {
-                // logger.LogWarning("Login failed. Email not found: {Email}", request.Email);
                 return Results.Unauthorized();
             }
 
-            // var accessToken = token.Create(user);
             httpContext.Session.SetString("userId", user.Id.ToString());
 
             return Results.Ok(new

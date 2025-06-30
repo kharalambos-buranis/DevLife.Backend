@@ -61,13 +61,15 @@ namespace DevLife_Portal.Features.Casino
                 var userId = int.Parse(userIdString);
                 var user = await _db.Users.FindAsync(userId);
 
+
                 var filter = Builders<CodeSnippet>.Filter.Regex("Language", new BsonRegularExpression(user.TechnoStack, "i")) &
-             Builders<CodeSnippet>.Filter.Eq(snippet => snippet.Experience, user.Experience);
+                Builders<CodeSnippet>.Filter.Eq(snippet => snippet.Experience, user.Experience);
+
 
 
                 Console.WriteLine($"User Stack: {user.TechnoStack}, Level: {user.Experience}");
 
-                var snippet = await _snippets.Find(filter).FirstOrDefaultAsync(); 
+                var snippet = await _snippets.Find(filter).FirstOrDefaultAsync();
 
                 if (snippet is null)
                 {
